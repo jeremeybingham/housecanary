@@ -1,0 +1,11 @@
+requests
+flask
+delorean
+SQLAlchemy
+pandas
+timeago
+tqdm
+gunicorn
+vulture
+Flask-Limiter
+redis

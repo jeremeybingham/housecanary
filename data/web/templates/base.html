@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="en">
+  
+  <head>
+    <!-- page title -->
+    <title>{% block title %}page title{% endblock %}</title>
+
+    <!-- charset, optimized for mobile -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+
+    {% block meta %}<!-- block for any custom META content -->
+    {% endblock %}<!-- end meta block -->
+      
+    <!-- bootstrap css - updated 3-2-22 @ https://getbootstrap.com -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    
+    <!-- bootstrap-table css - updated 3-2-22 @ https://bootstrap-table.com -->
+    <link rel="stylesheet" href="https://unpkg.com/bootstrap-table@1.19.1/dist/bootstrap-table.min.css">
+
+    <!-- google fonts -->
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand&family=Source+Code+Pro&display=swap" rel="stylesheet">
+
+    <!-- fontawesome icons - updated 3-2-22 @ https://fontawesome.com/kits/b6d4534c1b-->
+    <script src="https://kit.fontawesome.com/b6d4534c1b.js" crossorigin="anonymous"></script>
+    
+    {% block css %}<!-- block for any custom CSS content -->
+    {% endblock %}<!-- end css block -->
+    
+    {% block head %}<!-- block for any custom HEAD content-->
+    {% endblock %}<!-- end head block -->
+  </head>
+
+  <body>
+    <header>
+      <div>
+        {% block header %}
+        <!-- nav/header content goes here -->
+        {% endblock %}
+      </div>
+    </header>
+    <!-- end header block -->
+
+    <main>
+		{% block bootstrap_container_open %}
+		<!-- open bootstrap container, replace if not desired -->
+		<div class="container">
+		{% endblock %}
+		
+		
+        {% block content %}
+        <!-- page content goes here -->
+        {% endblock %}
+		
+		
+		<!-- home link -->
+		<a href="{{ url_for('hello') }}">Home</a>
+		
+		{% block bootstrap_container_close %}
+		<!-- close bootstrap container, replace if not desired -->
+		</div>
+		{% endblock %}		
+		
+    </main>
+    <!-- end content block -->
+        
+	{% block footer %}
+    <!-- footer content goes here -->
+	{% endblock %}
+    <!-- end footer block, end html content -->
+	
+	
+<!-- add all javascript at end of body for optimized loading -->
+
+<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+
+<!-- javascript for bootstrap jquery & popper - 9-11-2020 @ https://getbootstrap.com -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+
+<!-- javascript for bootstrap - 9-11-2020 @ https://www.bootstrapcdn.com -->
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+
+<!-- bootstrap-table Latest compiled and minified JavaScript 9-11-2020 @ https://bootstrap-table.com-->
+<script src="https://unpkg.com/bootstrap-table@1.17.1/dist/bootstrap-table.min.js"></script>
+
+
+{% block js %}
+<!-- additional javascript for specific pages goes here -->
+{% endblock %}
+<!-- end javascript block, end of document -->
+
+<!-- close html document tags -->
+</body>
+</html>

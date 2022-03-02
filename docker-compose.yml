@@ -1,0 +1,65 @@
+version: '3'
+
+services:
+
+  #* nginx container
+  nginx:
+    container_name: nginx
+    image: nginx:stable-alpine
+    restart: unless-stopped
+    environment:
+      - TZ=America/New_York
+    volumes:
+      - ./data/nginx:/etc/nginx/conf.d
+      - ./data/certbot/conf:/etc/letsencrypt
+      - ./data/certbot/www:/var/www/certbot
+    ports:
+      - "80:80"
+      - "443:443"
+    command: "/bin/sh -c 'while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g \"daemon off;\"'"
+
+  #* certbot container
+  certbot:
+    container_name: certbot
+    image: certbot/certbot
+    restart: unless-stopped
+    environment:
+      - TZ=America/New_York
+    volumes:
+      - ./data/certbot/conf:/etc/letsencrypt
+      - ./data/certbot/www:/var/www/certbot
+    entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
+
+  #* webapp container
+  web:
+    container_name: web
+    build: .
+    command: ["gunicorn", "app:app", "-b", "0.0.0.0:5000"]
+    restart: unless-stopped
+    volumes:
+      - ./data/web:/data/web
+      - /data/web/maintenance #* excludes maintenance folder from build context
+    ports:
+      - "5000:5000"
+    env_file:
+      - .env
+
+  #* mysql container
+  mysql:
+    container_name: mysql
+    image: mysql
+    restart: unless-stopped
+    volumes:
+      - ./data/mysql:/var/lib/mysql
+    env_file:
+      - .env
+  
+  #* adminer container
+  adminer:
+    container_name: adminer
+    image: adminer
+    restart: unless-stopped
+    environment:
+      - TZ=America/New_York
+    ports:
+      - "8080:8080"
