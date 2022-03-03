@@ -6,6 +6,7 @@ import uuid
 import json
 import logging
 from sqlalchemy import create_engine
+import os
 
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
@@ -59,5 +60,10 @@ def time():
 
     # create JSON response
     json_response = json.dumps(time_dict)
-
     return json_response
+
+
+# analyze requests endpoint
+@app.route('/req/', methods=['GET'])
+def req():
+    return str(request.headers)

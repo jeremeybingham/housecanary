@@ -3,7 +3,8 @@
 # run this prior to first run to register SSL certs
 
 # import .env variables
-export $(egrep -v '^#' .env | xargs)
+# export $(egrep -v '^#' .env | xargs)
+export $(xargs <.env)
 
 # set system timezone
 timedatectl set-timezone $TZ
@@ -16,7 +17,7 @@ domains=($DOMAIN www.$DOMAIN)
 rsa_key_size=4096
 data_path="./data/certbot"
 email=$SSL_EMAIL # adding a valid address is strongly recommended
-staging=1 # set to 1 if testing to avoid hitting request limits
+staging=0 # set to 1 if testing to avoid hitting request limits
 
 if [ -d "$data_path" ]; then
   read -p "existing data found for $domains. continue and replace existing certificate? (y/N) " decision
@@ -57,6 +58,7 @@ echo
 
 
 echo "### requesting Let's Encrypt certificate for $domains ..."
+
 # join $domains to -d args
 domain_args=""
 for domain in "${domains[@]}"; do
