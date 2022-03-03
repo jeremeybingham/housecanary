@@ -1,0 +1,12 @@
+# .dockerignore
+.git
+.cache
+.env
+.gitignore
+cert.sh
+docker-compose.yml
+Dockerfile
+**mysql
+**certbot
+**nginx
+**__pycache__
