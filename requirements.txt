@@ -9,3 +9,5 @@ gunicorn
 vulture
 Flask-Limiter
 redis
+pymysql
+cryptography

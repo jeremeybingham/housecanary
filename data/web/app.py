@@ -1,7 +1,6 @@
 # HouseCanary API Rate Limiter
 
 #~ imports
-from ast import And
 from flask import Flask, render_template, request, send_from_directory, redirect, url_for, abort
 from delorean import Delorean
 import uuid
