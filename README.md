@@ -44,7 +44,7 @@ Examples:
 
 ### https://housecanary.mansard.net/time2
 
-Identical to `time1`, but with different limits. Requests are limited to 20 per 2 minutes globally, and 10 2 minutes per IP.
+Identical to `time1`, but with different limits. Requests are limited to 20 per 2 minutes globally, and 10 per 2 minutes per IP.
 
 ### https://housecanary.mansard.net/time2_status
 Identical to `time1_status`
