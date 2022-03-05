@@ -1,7 +1,7 @@
 # HouseCanary API Rate Limiter
 
 #~ imports
-from flask import Flask, render_template, request, send_from_directory, abort
+from flask import Flask, request, send_from_directory, abort
 from delorean import Delorean
 import uuid
 import json
@@ -27,7 +27,7 @@ logging.basicConfig(format='%(levelname)s|%(asctime)s|%(name)s|%(message)s', dat
 app = Flask(__name__)
 app.secret_key = os.environ['FLASK_SECRET_KEY']
 
-# instantiate Flask-Limiter for example 3
+# instantiate Flask-Limiter for example 4
 app.wsgi_app = ProxyFix(app.wsgi_app, x_for=1)
 limiter = Limiter(app, key_func=get_remote_address)
 
@@ -40,10 +40,10 @@ password=os.environ['DB_PASSWORD']
 host=os.environ['MYSQL_HOST']
 db=os.environ['MYSQL_DATABASE']
 
-# global interval and limits for endpoint 4
+# global interval and limits for endpoint /time3
 global_interval = 60000            # interval to limit requests within, in milliseconds
-global_limit = 10                  # global request limit in that interval from all clients
-global_limit_single_client = 5     # limit for a single client in that interval
+global_limit = 6                  # global request limit in that interval from all clients
+global_limit_single_client = 3     # limit for a single client in that interval
 
 #~ functions
 
@@ -52,7 +52,7 @@ def get_cnx():
     return create_engine(f'mysql+pymysql://{user}:{password}@{host}:3306/{db}').connect()
 
 
-# generate the time json package to return from views
+# generate the time json package to return from endpoints
 def time_json():
 
     # create a blank dict to hold JSON elements
@@ -152,7 +152,6 @@ def process_request(request_headers, interval, limit, limit_single_client):
 
 
 # test if rate limit has currently been reached, matching endpoint limit conditions
-#! values could be globals or inherited from route, maybe?
 def test_limit(interval, limit, limit_single_client):
 
     # create a sqalchemy connection object
@@ -175,7 +174,6 @@ def test_limit(interval, limit, limit_single_client):
         
         # number of requests from IP with the most requests in the interval
         #! if any requester has exceeded limit, test is true
-        #! technically not rate-limited to other IPs, but an active "limit condition" does exist in the system
         top_single_client_requests = Counter([k for (k,v) in fetch_sql]).most_common(1)[0]
 
         # rate is currently limited if requests_total >= limit
@@ -206,7 +204,7 @@ def static_from_root():
 # root
 @app.route('/', methods=['GET'])
 def root():
-    return 'Hi HouseCanary Team!'
+    return 'Hi HouseCanary Team! <br> https://github.com/mansard/housecanary'
 
 
 # time1 endpoint - test 1, requests limited to 6/minute global and 3/minute per IP
@@ -242,7 +240,7 @@ def time1_status():
     limit = 6                   # global request limit in that interval from all clients
     limit_single_client = 3     # limit for a single client in that interval
 
-    # check status of time1 endpoint by simulating a request with 'test_limit'
+    # check status of endpoint by simulating a request with 'test_limit'
     # returns true if limit exceeded, send unavailable response as json
     if test_limit(interval, limit, limit_single_client) == True:
         response = {'status': 'unavailable', 'limit_exceeded': 'True', 'retry-after':f'{interval}', 'http_code': '429 Too Many Requests'}
@@ -274,7 +272,7 @@ def time2_status():
     limit = 20                   # global request limit in that interval from all clients
     limit_single_client = 10     # limit for a single client in that interval
 
-    # check status of time1 endpoint by simulating a request with 'test_limit'
+    # check status of endpoint by simulating a request with 'test_limit'
     # returns true if limit exceeded, send unavailable response as json
     if test_limit(interval, limit, limit_single_client) == True:
         response = {'status': 'unavailable', 'limit_exceeded': 'True', 'retry-after':f'{interval}', 'http_code': '429 Too Many Requests'}
@@ -286,23 +284,11 @@ def time2_status():
         return json.dumps(response)
 
 
-# time3 endpoint - cheating with Flask-Limiter
-@app.route('/time3/', methods=['GET'])
-@limiter.limit("3 per minute")
-def time3():
-
-    # call time function to create response
-    json_response = time_json()
-
-    # return the response
-    return json_response
-
-
-# time4 endpoint - test 4, requests limited to 10/minute global and 5/minute per IP
+# time3 endpoint - test 3, same limits as time1
 # rates and limits set with globals
 # integrated status check by adding '?status=check' to URL
-@app.route('/time4/', methods=['GET'])
-def time4():
+@app.route('/time3/', methods=['GET'])
+def time3():
     
     # pass 'status=check' in url args to test this endpoint's status
     if request.args and request.args['status'] == 'check':
@@ -332,6 +318,18 @@ def time4():
 
             # return the response
             return json_response
+
+
+# time4 endpoint - cheating with Flask-Limiter
+@app.route('/time4/', methods=['GET'])
+@limiter.limit("3 per minute")
+def time4():
+
+    # call time function to create response
+    json_response = time_json()
+
+    # return the response
+    return json_response
 
 
 #~ testing endpoints
