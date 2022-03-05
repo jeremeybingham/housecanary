@@ -260,8 +260,21 @@ def time2():
     interval = 120000            # interval to limit requests within, in milliseconds
     limit = 20                   # global request limit in that interval from all clients
     limit_single_client = 10     # limit for a single client in that interval
+    
+    # check if limits have been exceeded
+    request_check = process_request(request.headers, interval, limit, limit_single_client)
+    
+    # request check will abort request automatically if limit exceeded, or return True if OK to serve request
+    if request_check == True:
 
-    return process_request(request.headers, interval, limit, limit_single_client)
+        # call time function to create response
+        json_response = time_json()
+
+        # log the completed request in the db
+        write_row(request.headers)
+
+        # return the response
+        return json_response
 
 # time2 endpoint status check 
 @app.route('/time2_status/', methods=['GET']) 
