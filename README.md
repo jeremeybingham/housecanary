@@ -28,11 +28,11 @@ The endpoints available are noted and explained below.
 
 # Endpoints
 
-### `https://housecanary.mansard.net/time1`
+### https://housecanary.mansard.net/time1
 
 This endpoint returns a JSON time package. Requests are limited to 6 per minute globally, and 3 per minute per IP.
 
-### `https://housecanary.mansard.net/time1_status`
+### https://housecanary.mansard.net/time1_status
 This endpoint returns a JSON package with information about the current limit status of the `time1` endpoint. 
 
 Examples:
@@ -42,33 +42,32 @@ Examples:
 {"status": "unavailable", "limit_exceeded": "True", "retry-after": "60000", "http_code": "429 Too Many Requests"}
 ```
 
-### `https://housecanary.mansard.net/time2`
+### https://housecanary.mansard.net/time2
 
 Identical to `time1`, but with different limits. Requests are limited to 20 per 2 minutes globally, and 10 2 minutes per IP.
 
-### `https://housecanary.mansard.net/time2_status`
+### https://housecanary.mansard.net/time2_status
 Identical to `time1_status`
 
-### `https://housecanary.mansard.net/time3`
+### https://housecanary.mansard.net/time3
 
 Identical results and limits as `time1`, but using limits and intervals set with global variables and different logic.
 
-### `https://housecanary.mansard.net/time3?status=check`
+### https://housecanary.mansard.net/time3?status=check
 Identical to `time1_status`, but served from the same route/function and using the same globals.
 
-### `https://housecanary.mansard.net/time4`
-
+### https://housecanary.mansard.net/time4
 Identical results and limits as `time1`, but cheating by using the Flask-Limiter package, just as an example of what I'd probably REALLY do in a production scenario.
 
 ## Other Endpoints, for fun
 
-### `https://housecanary.mansard.net/headers`
+### https://housecanary.mansard.net/headers
 Returns the Flask request headers from your request
 
-### `https://housecanary.mansard.net/time_test`
+### https://housecanary.mansard.net/time_test
 Just returns the time JSON package, no limit or database entry 
 
-### `https://housecanary.mansard.net/db_test`
+### https://housecanary.mansard.net/db_test
 Creates a new database entry matching your request - returns your request headers. Will count against your quota in other endpoints!
 
 # Other Thoughts
