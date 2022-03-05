@@ -1,6 +1,6 @@
 # HouseCanary Rate Limiter Take-Home
 
-The entire application is located in: `data/web/app.py`
+This repo contains all the Docker stuff and other files, but the entire application is located in: `data/web/app.py`
 
 I used Python and Flask to serve requests, and MySQL as the database. When a request is made to an endpoint, its headers are passed to `process_request()` along with the information about the rate limits to be imposed on that endpoint:
 
