@@ -1,6 +1,6 @@
 # HouseCanary Rate Limiter Take-Home
 
-This repo contains all the Docker stuff and other files, but the entire application is located in: `data/web/app.py`
+This repo contains all the Docker stuff and other files, but the entire application is located in: [`data/web/app.py`](https://github.com/mansard/housecanary/blob/main/data/web/app.py)
 
 It's running in Docker on a t3a.medium ec2 instance with NGINX and Gunicorn to manage networking, with the instance DNS pointed at https://housecanary.mansard.net. 
 
